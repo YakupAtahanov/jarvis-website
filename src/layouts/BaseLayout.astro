@@ -59,6 +59,15 @@ const websiteSchema = JSON.stringify({
     <meta name="generator" content={Astro.generator} />
     <link rel="canonical" href={canonicalURL} />
 
+    <script>
+      import trevo from "@trevosdk/browser";
+
+      const apiKey = import.meta.env.PUBLIC_TREVO_API_KEY;
+      if (apiKey) {
+        trevo.init({ apiKey });
+      }
+    </script>
+
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="JARVIS OS" />
