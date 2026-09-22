@@ -260,6 +260,12 @@ sudo ./01-*.sh   # begin the build pipeline</code></pre>
 </style>
 
 <script>
+  import trevo from "@trevosdk/browser";
+
+  trevo.track("download_page_viewed", {
+    experimentKey: "put-the-download-choices-in-reach-from",
+  });
+
   async function fetchRelease() {
     try {
       const res = await fetch(
@@ -273,6 +279,14 @@ sudo ./01-*.sh   # begin the build pipeline</code></pre>
       const bodyEl = document.getElementById("release-body");
       const dlBtn = document.getElementById("download-btn") as HTMLAnchorElement;
       const rlBtn = document.getElementById("release-link") as HTMLAnchorElement;
+
+      if (dlBtn) {
+        dlBtn.addEventListener("click", () => {
+          trevo.track("download_iso_clicked", {
+            experimentKey: "put-the-download-choices-in-reach-from",
+          });
+        });
+      }
 
       if (tagEl) tagEl.textContent = data.name || data.tag_name;
       if (dateEl)
