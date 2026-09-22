@@ -1,0 +1,46 @@
+---
+---
+
+<nav class="installing-guide-paths" data-trevo-installing-guide-variant hidden aria-label="Jump to your setup">
+  <a href="#1-boot-from-usb">Boot from USB</a>
+  <a href="#4-virtual-machine">Run in a virtual machine</a>
+</nav>
+
+<script>
+  import trevo, { defineExperiment } from "@trevosdk/browser";
+
+  const experiment = defineExperiment("let-installation-guide-readers-choose", ["control", "variant"]);
+
+  function revealVariant() {
+    if (!trevo.isReady()) return;
+
+    const variant = trevo.getVariant(experiment);
+    if (variant === "variant") {
+      document.querySelectorAll("[data-trevo-installing-guide-variant]").forEach((el) => {
+        el.hidden = false;
+      });
+    }
+  }
+
+  revealVariant();
+</script>
+
+<style>
+  .installing-guide-paths {
+    display: flex;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+  }
+
+  .installing-guide-paths a {
+    font-size: 0.85rem;
+    color: var(--cyan);
+    text-decoration: underline;
+    text-decoration-color: var(--border-glow);
+    text-underline-offset: 2px;
+  }
+
+  .installing-guide-paths a:hover {
+    text-decoration-color: var(--cyan);
+  }
+</style>
