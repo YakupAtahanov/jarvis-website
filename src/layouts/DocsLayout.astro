@@ -53,6 +53,8 @@ const byCategory = CATEGORY_ORDER.map((category) => ({
 <script>
   import trevo from "@trevosdk/browser";
 
+  trevo.track("docs_article_viewed");
+
   const article = document.querySelector(".docs-prose");
   const lastElement = article?.lastElementChild;
 
