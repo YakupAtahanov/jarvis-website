@@ -50,6 +50,23 @@ const byCategory = CATEGORY_ORDER.map((category) => ({
   </section>
 </BaseLayout>
 
+<script>
+  import trevo from "@trevosdk/browser";
+
+  const article = document.querySelector(".docs-prose");
+  const lastElement = article?.lastElementChild;
+
+  if (lastElement) {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        trevo.track("docs_article_completed");
+        observer.disconnect();
+      }
+    });
+    observer.observe(lastElement);
+  }
+</script>
+
 <style>
   .docs-shell-section {
     padding-top: var(--space-2xl);
