@@ -34,15 +34,38 @@ const categories = CATEGORY_ORDER.map((category) => {
     </div>
   </section>
 
+  <!-- Featured installation-guide choice (variant only) -->
+  <section class="section" style="padding-top: 0;" id="quick-start-featured" hidden>
+    <div class="container">
+      <div class="card">
+        <h3>Start with the installation guide</h3>
+        <p>The fastest way to try JARVIS OS. Download the pre-built ISO, flash it, and boot.</p>
+        <a
+          href="/docs/installing"
+          class="btn btn-primary"
+          id="quick-start-featured-link"
+          style="margin-top: var(--space-lg);"
+        >
+          Start with the installation guide &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- Quick start -->
   <section class="section" style="padding-top: 0;">
     <div class="container">
       <h2 style="margin-bottom: var(--space-xl);">Quick Start</h2>
       <div class="grid-2">
-        <div class="card">
+        <div class="card" id="quick-start-option-a">
           <h3>Option A: Download ISO</h3>
           <p>The fastest way to try JARVIS OS. Download the pre-built ISO, flash it, and boot.</p>
-          <a href="/docs/installing" class="btn btn-outline" style="margin-top: var(--space-lg);">
+          <a
+            href="/docs/installing"
+            class="btn btn-outline"
+            id="quick-start-option-a-link"
+            style="margin-top: var(--space-lg);"
+          >
             Installing JARVIS OS &rarr;
           </a>
         </div>
@@ -112,3 +135,38 @@ const categories = CATEGORY_ORDER.map((category) => {
     color: var(--cyan);
   }
 </style>
+
+<script>
+  import trevo, { defineExperiment } from "@trevosdk/browser";
+
+  const quickStartExperiment = defineExperiment(
+    "put-the-installation-guide-first-on-the",
+    ["control", "variant"]
+  );
+
+  document.addEventListener("click", (event) => {
+    const target = event.target as Element;
+    if (!target.closest("#quick-start-option-a-link, #quick-start-featured-link")) return;
+
+    trevo.track("quick_start_path_clicked", {
+      experimentKey: "put-the-installation-guide-first-on-the",
+    });
+  });
+
+  function applyQuickStartVariant() {
+    if (!trevo.isReady()) {
+      setTimeout(applyQuickStartVariant, 50);
+      return;
+    }
+
+    const variant = trevo.getVariant(quickStartExperiment);
+    if (variant !== "control") {
+      const featured = document.getElementById("quick-start-featured");
+      const optionA = document.getElementById("quick-start-option-a");
+      if (featured) featured.hidden = false;
+      if (optionA) optionA.hidden = true;
+    }
+  }
+
+  applyQuickStartVariant();
+</script>
