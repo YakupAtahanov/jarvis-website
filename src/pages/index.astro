@@ -76,6 +76,9 @@ const researchSchema = JSON.stringify({
             Check out our repo
           </a>
           <a href="/research" class="btn btn-outline">Read the Research</a>
+          <a href="/download" class="btn btn-outline" id="hero-get-jarvis" style="display: none;">
+            Get JARVIS OS
+          </a>
         </div>
         <div class="hero-meta mono">
           <span>Arch Linux + KDE Plasma 6</span>
@@ -395,3 +398,27 @@ const researchSchema = JSON.stringify({
     }
   }
 </style>
+
+<script>
+  import trevo, { defineExperiment } from "@trevosdk/browser";
+
+  const heroDownloadExperiment = defineExperiment(
+    "put-the-download-choices-in-reach-from",
+    ["control", "variant"]
+  );
+
+  function applyHeroDownloadVariant() {
+    if (!trevo.isReady()) {
+      setTimeout(applyHeroDownloadVariant, 50);
+      return;
+    }
+
+    const variant = trevo.getVariant(heroDownloadExperiment);
+    if (variant !== "control") {
+      const link = document.getElementById("hero-get-jarvis");
+      if (link) link.style.display = "inline-flex";
+    }
+  }
+
+  applyHeroDownloadVariant();
+</script>
