@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import FreedomControlDownloadVariant from "../components/FreedomControlDownloadVariant.astro";
 ---
 
 <BaseLayout
@@ -88,6 +89,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           <a href="/ai-control" class="btn btn-outline-green">
             Switch to Choice B →
           </a>
+          <FreedomControlDownloadVariant />
         </div>
       </div>
     </div>
@@ -340,3 +342,16 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     }
   }
 </style>
+
+<script>
+  import trevo from "@trevosdk/browser";
+
+  const downloadLink = document.querySelector("[data-trevo-freedom-control-download]");
+  if (downloadLink) {
+    downloadLink.addEventListener("click", () => {
+      trevo.track("freedom_control_download_clicked", {
+        experimentKey: "offer-a-direct-download-action-beside",
+      });
+    });
+  }
+</script>
