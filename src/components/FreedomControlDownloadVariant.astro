@@ -1,0 +1,52 @@
+---
+---
+
+<a href="/download" class="fc-download-link" data-trevo-freedom-control-download hidden>
+  Download JARVIS OS →
+</a>
+
+<script>
+  import trevo, { defineExperiment } from "@trevosdk/browser";
+
+  const experiment = defineExperiment("offer-a-direct-download-action-beside", ["control", "variant"]);
+
+  function revealVariant() {
+    if (!trevo.isReady()) return;
+
+    const variant = trevo.getVariant(experiment);
+    if (variant !== "control") {
+      document.querySelectorAll("[data-trevo-freedom-control-download]").forEach((el) => {
+        el.hidden = false;
+      });
+    }
+  }
+
+  revealVariant();
+</script>
+
+<style>
+  .fc-download-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 0.75rem 1.5rem;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: 1px solid var(--green);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: transparent;
+    color: var(--green);
+    text-decoration: none;
+  }
+
+  .fc-download-link:hover {
+    background: var(--green);
+    color: var(--bg-primary);
+    box-shadow: 0 0 20px #00e67644;
+  }
+</style>

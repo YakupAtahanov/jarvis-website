@@ -285,6 +285,9 @@ sudo ./01-*.sh   # begin the build pipeline</code></pre>
           trevo.track("download_iso_clicked", {
             experimentKey: "put-the-download-choices-in-reach-from",
           });
+          trevo.track("iso_download_started", {
+            experimentKey: "offer-a-direct-download-action-beside",
+          });
         });
       }
 
