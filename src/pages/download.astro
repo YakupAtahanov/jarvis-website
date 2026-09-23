@@ -62,6 +62,9 @@ const downloadSchema = JSON.stringify({
         <div id="checksum-block" style="display: none; margin-top: var(--space-xl);">
           <span class="section-label">SHA-512 Checksum</span>
           <pre class="mono checksum-pre"><code id="checksum-value"></code></pre>
+          <p id="checksum-instruction" class="text-muted" style="display: none; margin-top: var(--space-sm); font-size: 0.85rem;">
+            After downloading, compare your file’s checksum with the release checksum shown here.
+          </p>
         </div>
       </div>
 
@@ -260,11 +263,29 @@ sudo ./01-*.sh   # begin the build pipeline</code></pre>
 </style>
 
 <script>
-  import trevo from "@trevosdk/browser";
+  import trevo, { defineExperiment } from "@trevosdk/browser";
 
   trevo.track("download_page_viewed", {
     experimentKey: "put-the-download-choices-in-reach-from",
   });
+
+  const checksumInstructionExperiment = defineExperiment(
+    "explain-the-iso-verification-step-beside",
+    ["control", "variant"]
+  );
+
+  function revealChecksumInstruction() {
+    if (!trevo.isReady()) {
+      setTimeout(revealChecksumInstruction, 50);
+      return;
+    }
+
+    const variant = trevo.getVariant(checksumInstructionExperiment);
+    if (variant !== "control") {
+      const instructionEl = document.getElementById("checksum-instruction");
+      if (instructionEl) instructionEl.style.display = "block";
+    }
+  }
 
   async function fetchRelease() {
     try {
@@ -284,6 +305,14 @@ sudo ./01-*.sh   # begin the build pipeline</code></pre>
         dlBtn.addEventListener("click", () => {
           trevo.track("download_iso_clicked", {
             experimentKey: "put-the-download-choices-in-reach-from",
+          });
+        });
+      }
+
+      if (dlBtn) {
+        dlBtn.addEventListener("click", () => {
+          trevo.track("iso_download_started", {
+            experimentKey: "explain-the-iso-verification-step-beside",
           });
         });
       }
@@ -334,6 +363,7 @@ sudo ./01-*.sh   # begin the build pipeline</code></pre>
       const show = (hex: string) => {
         valueEl.textContent = hex;
         block.style.display = "block";
+        revealChecksumInstruction();
       };
 
       const sumAsset = data.assets?.find(
