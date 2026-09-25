@@ -1,0 +1,48 @@
+---
+---
+
+<section class="section" data-trevo-research-next-step hidden>
+  <div class="container">
+    <span class="section-label">Get Started</span>
+    <h2 class="section-title">Try JARVIS OS for Your Research</h2>
+    <p class="next-step-desc">
+      The ISO is available today as a way to obtain the research OS described above.
+    </p>
+    <div class="next-step-actions">
+      <a href="/download" class="btn btn-primary">Get JARVIS OS</a>
+      <a href="/docs" class="btn btn-outline">Read the Docs</a>
+    </div>
+  </div>
+</section>
+
+<script>
+  import trevo, { defineExperiment } from "@trevosdk/browser";
+
+  const experiment = defineExperiment("give-research-readers-a-concrete-route", ["control", "variant"]);
+
+  function revealVariant() {
+    if (!trevo.isReady()) return;
+
+    const variant = trevo.getVariant(experiment);
+    if (variant !== "control") {
+      document.querySelectorAll("[data-trevo-research-next-step]").forEach((el) => {
+        el.hidden = false;
+      });
+    }
+  }
+
+  revealVariant();
+</script>
+
+<style>
+  .next-step-desc {
+    max-width: 640px;
+  }
+
+  .next-step-actions {
+    display: flex;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+    margin-top: var(--space-xl);
+  }
+</style>

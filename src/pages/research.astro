@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ThreatCard from "../components/ThreatCard.astro";
+import ResearchNextStepVariant from "../components/ResearchNextStepVariant.astro";
 
 const scholarlySchema = JSON.stringify({
   "@context": "https://schema.org",
@@ -354,6 +355,8 @@ const threats = [
       </div>
     </div>
   </section>
+
+  <ResearchNextStepVariant />
 </BaseLayout>
 
 <style>
