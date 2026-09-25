@@ -1,0 +1,94 @@
+---
+---
+
+<section class="research-setup-section" data-trevo-ai-control-research-setup hidden>
+  <div class="container">
+    <span class="section-label">Explore JARVIS OS</span>
+    <h2 class="section-title">Try the Research OS</h2>
+    <p class="research-setup-intro">
+      JARVIS OS runs a local LLM with full system privileges. Get it running, then
+      read the setup guidance.
+    </p>
+    <div class="research-setup-steps">
+      <div class="research-setup-step">
+        <span class="research-setup-step-number">1</span>
+        <h3>Get JARVIS OS</h3>
+        <a href="/download" class="btn btn-primary">Get JARVIS OS →</a>
+      </div>
+      <div class="research-setup-step">
+        <span class="research-setup-step-number">2</span>
+        <h3>Read the Docs</h3>
+        <a href="/docs" class="btn btn-outline">Read the Docs →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import trevo, { defineExperiment } from "@trevosdk/browser";
+
+  const experiment = defineExperiment("offer-an-actionable-os-research-path", ["control", "variant"]);
+
+  function revealVariant() {
+    if (!trevo.isReady()) return;
+
+    const variant = trevo.getVariant(experiment);
+    if (variant !== "control") {
+      document.querySelectorAll("[data-trevo-ai-control-research-setup]").forEach((el) => {
+        el.hidden = false;
+      });
+    }
+  }
+
+  revealVariant();
+</script>
+
+<style>
+  .research-setup-section {
+    padding: var(--space-3xl) 0;
+  }
+
+  .research-setup-intro {
+    max-width: 600px;
+    color: var(--text-secondary);
+  }
+
+  .research-setup-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--space-xl);
+    margin-top: var(--space-xl);
+  }
+
+  .research-setup-step {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: var(--space-xl);
+  }
+
+  .research-setup-step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.8rem;
+    height: 1.8rem;
+    border-radius: 50%;
+    border: 1px solid var(--cyan);
+    color: var(--cyan);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    margin-bottom: var(--space-md);
+  }
+
+  .research-setup-step h3 {
+    margin-bottom: var(--space-md);
+    font-size: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .research-setup-steps {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
