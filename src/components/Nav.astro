@@ -25,16 +25,38 @@ const links = [
     </button>
 
     <ul class="nav-links" id="nav-links">
-      {links.map((link) => (
-        <li>
-          <a
-            href={link.href}
-            class:list={["nav-link", { active: currentPath === link.href }]}
-          >
-            {link.label}
-          </a>
-        </li>
-      ))}
+      {links.map((link) =>
+        link.href === "/download" ? (
+          <>
+            <li id="nav-download-item">
+              <a
+                href={link.href}
+                class:list={["nav-link", { active: currentPath === link.href }]}
+              >
+                {link.label}
+              </a>
+            </li>
+            <li id="nav-download-formats-item" hidden>
+              <a
+                href={link.href}
+                class:list={["nav-link", "nav-link-download-formats", { active: currentPath === link.href }]}
+              >
+                <span class="nav-link-download-formats-label">Get JARVIS OS</span>
+                <span class="nav-link-download-formats-sub">ISO &middot; desktop app &middot; CLI</span>
+              </a>
+            </li>
+          </>
+        ) : (
+          <li>
+            <a
+              href={link.href}
+              class:list={["nav-link", { active: currentPath === link.href }]}
+            >
+              {link.label}
+            </a>
+          </li>
+        )
+      )}
       <li>
         <a
           href="https://github.com/JarvisOSLinux"
@@ -153,6 +175,20 @@ const links = [
     color: var(--text-muted);
   }
 
+  .nav-link-download-formats {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    line-height: 1.2;
+  }
+
+  .nav-link-download-formats-sub {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    text-transform: none;
+  }
+
   /* Mobile toggle */
   .nav-toggle {
     display: none;
@@ -214,6 +250,8 @@ const links = [
 </style>
 
 <script>
+  import trevo, { defineExperiment } from "@trevosdk/browser";
+
   const toggle = document.getElementById("nav-toggle");
   const links = document.getElementById("nav-links");
   const nav = document.querySelector(".nav");
@@ -233,4 +271,26 @@ const links = [
 
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
+
+  const downloadFormatsExperiment = defineExperiment(
+    "show-the-available-download-formats-in",
+    ["control", "variant"]
+  );
+
+  function applyDownloadFormatsVariant() {
+    if (!trevo.isReady()) {
+      setTimeout(applyDownloadFormatsVariant, 50);
+      return;
+    }
+
+    const variant = trevo.getVariant(downloadFormatsExperiment);
+    if (variant !== "control") {
+      const downloadItem = document.getElementById("nav-download-item");
+      const downloadFormatsItem = document.getElementById("nav-download-formats-item");
+      if (downloadItem) downloadItem.hidden = true;
+      if (downloadFormatsItem) downloadFormatsItem.hidden = false;
+    }
+  }
+
+  applyDownloadFormatsVariant();
 </script>
