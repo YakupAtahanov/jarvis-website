@@ -1,0 +1,42 @@
+---
+---
+
+<div class="docs-sidebar-install" data-trevo-docs-install-variant hidden>
+  <a href="/docs/installing" class="docs-sidebar-install-link">Installing JARVIS OS</a>
+</div>
+
+<script>
+  import trevo, { defineExperiment } from "@trevosdk/browser";
+
+  const experiment = defineExperiment("make-the-installation-guide-a-direct", ["control", "variant"]);
+
+  function revealVariant() {
+    if (!trevo.isReady()) return;
+
+    const variant = trevo.getVariant(experiment);
+    if (variant !== "control") {
+      document.querySelectorAll("[data-trevo-docs-install-variant]").forEach((el) => {
+        el.hidden = false;
+      });
+    }
+  }
+
+  revealVariant();
+</script>
+
+<style>
+  .docs-sidebar-install-link {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--cyan);
+    padding: 0.4em 0.7em;
+    border-radius: 4px;
+    border-left: 2px solid transparent;
+    transition: color var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast);
+  }
+
+  .docs-sidebar-install-link:hover {
+    background: #00c8ff08;
+    border-left-color: var(--cyan);
+  }
+</style>

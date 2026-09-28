@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
+import DocsInstallRouteVariant from "../components/DocsInstallRouteVariant.astro";
 import { getCollection } from "astro:content";
 
 interface Props {
@@ -25,6 +26,7 @@ const byCategory = CATEGORY_ORDER.map((category) => ({
   <section class="section docs-shell-section">
     <div class="container docs-shell">
       <aside class="docs-sidebar">
+        <DocsInstallRouteVariant />
         {byCategory.map(({ category, entries }) => (
           <div class="docs-sidebar-group">
             <span class="docs-sidebar-heading mono">{category}</span>
