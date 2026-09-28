@@ -43,7 +43,7 @@ const byCategory = CATEGORY_ORDER.map((category) => ({
           </div>
         ))}
       </aside>
-      <article class="docs-prose">
+      <article class="docs-prose" data-slug={slug}>
         <slot />
       </article>
     </div>
@@ -56,6 +56,13 @@ const byCategory = CATEGORY_ORDER.map((category) => ({
   trevo.track("docs_article_viewed");
 
   const article = document.querySelector(".docs-prose");
+
+  if (article?.getAttribute("data-slug") === "installing") {
+    trevo.track("docs_installing_viewed", {
+      experimentKey: "show-the-available-download-formats-in",
+    });
+  }
+
   const lastElement = article?.lastElementChild;
 
   if (lastElement) {
