@@ -1,9 +1,21 @@
 ---
 const year = new Date().getFullYear();
+const isDownloadPage = Astro.url.pathname === "/download";
 ---
 
 <footer class="footer">
   <div class="container">
+    {!isDownloadPage && (
+      <div class="footer-cta card glow-border" id="footer-get-jarvis" style="display: none;">
+        <div class="footer-cta-text">
+          <h3 class="footer-cta-heading">Get JARVIS</h3>
+          <p class="footer-cta-line">
+            Boot JarvisOS, run the Jarvis App on your desktop, or install the CLI/TUI daemon from PyPI.
+          </p>
+        </div>
+        <a href="/download" class="btn btn-primary footer-cta-btn">Download JARVIS OS</a>
+      </div>
+    )}
     <hr class="divider" />
     <div class="footer-grid">
       <div class="footer-brand">
@@ -57,9 +69,53 @@ const year = new Date().getFullYear();
   </div>
 </footer>
 
+<script>
+  import trevo, { defineExperiment } from "@trevosdk/browser";
+
+  const experiment = defineExperiment("give-every-page-a-closing-way-into", ["control", "variant"]);
+
+  function revealVariant() {
+    if (!trevo.isReady()) return;
+
+    const variant = trevo.getVariant(experiment);
+    if (variant !== "control") {
+      const strip = document.getElementById("footer-get-jarvis");
+      if (strip) strip.style.display = "flex";
+    }
+  }
+
+  revealVariant();
+</script>
+
 <style>
   .footer {
     padding-bottom: var(--space-2xl);
+  }
+
+  .footer-cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-xl);
+    padding: var(--space-xl) var(--space-2xl);
+    margin-bottom: var(--space-2xl);
+  }
+
+  .footer-cta-heading {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    color: var(--cyan);
+    margin-bottom: var(--space-xs);
+  }
+
+  .footer-cta-line {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    max-width: 560px;
+  }
+
+  .footer-cta-btn {
+    flex-shrink: 0;
   }
 
   .footer-grid {
@@ -129,6 +185,13 @@ const year = new Date().getFullYear();
   }
 
   @media (max-width: 768px) {
+    .footer-cta {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-lg);
+      padding: var(--space-lg) var(--space-md);
+    }
+
     .footer-grid {
       grid-template-columns: 1fr 1fr;
       gap: var(--space-xl);
