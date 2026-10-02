@@ -161,6 +161,21 @@ const subsystems = [
       </div>
     </div>
   </section>
+
+  <section class="section" id="run-stack" style="display: none;">
+    <div class="container">
+      <span class="section-label">Run it</span>
+      <h2 class="section-title">Run the whole stack</h2>
+      <p class="run-stack-copy">
+        The JarvisOS ISO ships all of these subsystems preconfigured. Prefer your own
+        machine? Run the Jarvis App or pip install the daemon.
+      </p>
+      <div class="run-stack-actions">
+        <a href="/download" class="btn btn-primary">Get JARVIS OS</a>
+        <a href="/docs" class="btn btn-outline">Read the Docs</a>
+      </div>
+    </div>
+  </section>
 </BaseLayout>
 
 <style>
@@ -212,6 +227,19 @@ const subsystems = [
     font-size: 0.85rem;
     line-height: 1.6;
     color: var(--text-secondary);
+  }
+
+  .run-stack-copy {
+    font-size: 1.05rem;
+    max-width: 640px;
+    line-height: 1.7;
+  }
+
+  .run-stack-actions {
+    display: flex;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+    margin-top: var(--space-xl);
   }
 
   /* --- Animated diagram --- */
@@ -345,5 +373,33 @@ const subsystems = [
     .row-support {
       gap: var(--space-sm);
     }
+
+    .run-stack-actions {
+      flex-direction: column;
+    }
   }
 </style>
+
+<script>
+  import trevo, { defineExperiment } from "@trevosdk/browser";
+
+  const runStackExperiment = defineExperiment(
+    "close-the-subsystems-tour-with-the",
+    ["control", "variant"]
+  );
+
+  function applyRunStackVariant() {
+    if (!trevo.isReady()) {
+      setTimeout(applyRunStackVariant, 50);
+      return;
+    }
+
+    const variant = trevo.getVariant(runStackExperiment);
+    if (variant !== "control") {
+      const section = document.getElementById("run-stack");
+      if (section) section.style.display = "block";
+    }
+  }
+
+  applyRunStackVariant();
+</script>
