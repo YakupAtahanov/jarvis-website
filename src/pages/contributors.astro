@@ -66,6 +66,26 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         <a href="https://github.com/JarvisOSLinux" target="_blank" rel="noopener noreferrer">jarvisos</a>
         organization, fetched live from the GitHub API.
       </p>
+      <div class="card test-report-card" id="test-report-brief" style="margin-bottom: var(--space-xl);" hidden>
+        <h3>Contribute a test report</h3>
+        <p>Run JARVIS OS and report what you observe.</p>
+        <ol class="test-report-steps">
+          <li>Download the ISO and boot the live environment</li>
+          <li>Record the release, your environment, and the steps you tried</li>
+          <li>Describe what you expected and what happened.</li>
+        </ol>
+        <div class="test-report-actions">
+          <a href="/download" class="btn btn-primary">Download JARVIS OS &rarr;</a>
+          <a
+            href="https://github.com/JarvisOSLinux/jarvisos/issues"
+            class="btn btn-outline"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Report an issue &nearr;
+          </a>
+        </div>
+      </div>
       <div class="grid-4" id="contributors-grid">
         <div class="card" style="grid-column: 1 / -1; text-align: center;">
           <p class="mono text-muted">Loading contributors...</p>
@@ -128,6 +148,27 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     font-size: 0.7rem;
     color: var(--text-muted);
     margin-top: var(--space-xs);
+  }
+
+  .test-report-steps {
+    margin: var(--space-md) 0 0 var(--space-xl);
+    color: var(--text-secondary);
+  }
+
+  .test-report-steps li {
+    margin-bottom: var(--space-xs);
+  }
+
+  .test-report-steps li::marker {
+    font-family: var(--font-mono);
+    color: var(--cyan);
+  }
+
+  .test-report-actions {
+    display: flex;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+    margin-top: var(--space-lg);
   }
 </style>
 
@@ -197,4 +238,28 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   }
 
   fetchContributors();
+</script>
+
+<script>
+  import trevo, { defineExperiment } from "@trevosdk/browser";
+
+  const testReportExperiment = defineExperiment(
+    "invite-contributor-page-readers-to",
+    ["control", "variant"]
+  );
+
+  function applyTestReportVariant() {
+    if (!trevo.isReady()) {
+      setTimeout(applyTestReportVariant, 50);
+      return;
+    }
+
+    const variant = trevo.getVariant(testReportExperiment);
+    if (variant !== "control") {
+      const brief = document.getElementById("test-report-brief");
+      if (brief) brief.hidden = false;
+    }
+  }
+
+  applyTestReportVariant();
 </script>
